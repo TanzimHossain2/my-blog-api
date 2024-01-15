@@ -37,6 +37,7 @@ app.route('/api/v1/articles')
         const db = await connection.getDB();
         let articles = db.articles;
 
+
         // filter by search term
         if (searchTerm) {
             try {
@@ -52,13 +53,17 @@ app.route('/api/v1/articles')
                 return a[sortBy].toString().localeCompare(b[sortBy].toString());
             }
             return b[sortBy].toString().localeCompare(a[sortBy].toString());
-
         });
 
+        // paginate articles
+        const skip = limit * page - limit;
+        let resultedArticles = articles.slice(skip, skip + limit);
+        const totalItems = articles.length;
+        const totalPage = Math.ceil(totalItems / limit);
 
 
         // 3. generate necessary response
-        const transformedArticles = articles.map(article => {
+        resultedArticles = resultedArticles.map(article => {
 
             const transformed = { ...article };
             transformed.author = {
@@ -74,25 +79,30 @@ app.route('/api/v1/articles')
         })
 
         const response = {
-            data: transformedArticles,
+            data: resultedArticles,
             pagination: {
                 page,
                 limit,
-                next: page + 1,
-                prev: page - 1,
-                totalPage: Math.ceil(articles.length / limit),
-                totalItems: articles.length
+                totalPage,
+                totalItems
             },
             links: {
                 self: req.originalUrl,
-                next: `/articles?page=${page + 1}&limit=${limit}`,
-                prev: `/articles?page=${page - 1}&limit=${limit}`
             }
+        }
+
+        if (page > 1) {
+            response.pagination.prev = page - 1;
+            response.links.prev = `/articles?page=${page - 1}&limit=${limit}`;
+        }
+
+        if (page < totalPage) {
+            response.pagination.next = page + 1;
+            response.links.next = `/articles?page=${page + 1}&limit=${limit}`;
         }
 
         res.status(200).json(response);
     })
-
     // create new article
     .post((req, res) => {
         res.status(200).send({ path: '/articles', method: 'POST' });
