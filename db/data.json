@@ -1,1 +1,28 @@
-{"users":["Tanzim","Test"],"articles":["Tanzim"],"comments":["a"]}
+{ "users": [], "articles": [{
+    "id":1,
+    "authorId":1,
+    "title":"Hello World",
+    "body":"This is my first article",
+    "status":"published",
+    "createdAt":"2024-01-15T12:19:17.461Z",
+    "updatedAt":"2024-01-15T12:19:54.461Z"
+}, {
+    "id":2,
+    "authorId":2,
+    "title":"JavaScript",
+    "body":"This is my second article",
+    "status":"published",
+    "createdAt":"2024-01-15T12:39:17.461Z",
+    "updatedAt":"2024-01-15T12:39:54.461Z"
+},
+
+{
+    "id":3,
+    "authorId":3,
+    "title":"Go",
+    "body":"This is my third article",
+    "status":"published",
+    "createdAt":"2024-01-15T12:48:56.858Z",
+    "updatedAt":"2024-01-15T12:48:56.858Z"
+}
+], "comments": [] }
