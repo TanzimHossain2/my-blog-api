@@ -5,8 +5,7 @@ const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
 const PORT = process.env.PORT || 4000;
 
-// Database connection
-const connection = require('./db');
+const Article = require('./models/Article');
 
 
 // express app
@@ -34,36 +33,32 @@ app.route('/api/v1/articles')
         const searchTerm = req.query.search || '';
 
         // 2. call article service to fetch all articles
-        const db = await connection.getDB();
-        let articles = db.articles;
-
+        const articleInstance = new Article();
+        await articleInstance.init();
+        let articles;
 
         // filter by search term
         if (searchTerm) {
-            try {
-                articles = articles.filter(article => article.title.toLowerCase().includes(searchTerm.toLowerCase()));
-            } catch (error) {
-                console.log(error);
-            }
+            articles = await articleInstance.search(searchTerm);
+        } else {
+            articles = await articleInstance.find();
         }
 
         // sort articles
-        articles.sort((a, b) => {
-            if (sortType === 'asc') {
-                return a[sortBy].toString().localeCompare(b[sortBy].toString());
-            }
-            return b[sortBy].toString().localeCompare(a[sortBy].toString());
-        });
-
+        articles = await articleInstance.sort(articles, sortType, sortBy);
         // paginate articles
-        const skip = limit * page - limit;
-        let resultedArticles = articles.slice(skip, skip + limit);
-        const totalItems = articles.length;
-        const totalPage = Math.ceil(totalItems / limit);
+        const {
+            result,
+            totalItems,
+            totalPage,
+            hasNext,
+            hasPrev
+        } = await articleInstance.pagination(articles, page, limit);
 
-
+        articles = result;
+        
         // 3. generate necessary response
-        resultedArticles = resultedArticles.map(article => {
+        articles = articles.map(article => {
 
             const transformed = { ...article };
             transformed.author = {
@@ -79,7 +74,7 @@ app.route('/api/v1/articles')
         })
 
         const response = {
-            data: resultedArticles,
+            data: articles,
             pagination: {
                 page,
                 limit,
@@ -91,12 +86,12 @@ app.route('/api/v1/articles')
             }
         }
 
-        if (page > 1) {
+        if (hasPrev) {
             response.pagination.prev = page - 1;
             response.links.prev = `/articles?page=${page - 1}&limit=${limit}`;
         }
 
-        if (page < totalPage) {
+        if (hasNext) {
             response.pagination.next = page + 1;
             response.links.next = `/articles?page=${page + 1}&limit=${limit}`;
         }
