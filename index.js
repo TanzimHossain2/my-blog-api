@@ -3,16 +3,27 @@ const express = require('express');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
+const OpenApiValidator = require('express-openapi-validator');
+
+// PORT
 const PORT = process.env.PORT || 4000;
 
-const Article = require('./models/Article');
+// services
 const articleService = require('./services/article');
 
 
 // express app
 const app = express();
+
+// middlewares
 app.use(express.json());
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use(
+    OpenApiValidator.middleware({
+        apiSpec: './swagger.yaml',
+    }),
+);
+
 
 // routes
 // Health check route
@@ -90,6 +101,16 @@ app.route('/api/v1/auth/signin')
     .post((req, res) => {
         res.status(200).send({ path: '/auth/signin', method: 'POST' });
     });
+
+
+// Error handler
+app.use((err, req, res, next) => {
+    // format error
+    res.status(err.status || 500).json({
+      message: err.message,
+      errors: err.errors,
+    });
+  });
 
 
 // start server

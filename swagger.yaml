@@ -498,10 +498,10 @@ components:
       properties:
         createAt:
           type: string
-          format: datetime
+          format: date-time
         updatedAt:
           type: string
-          format: datetime
+          format: date-time
     AuthotDTO:
       type: object
       properties:
@@ -634,6 +634,7 @@ components:
       in: query
       name: page
       description: current page number
+      required: true
       schema:
         type: integer
         format: int32
@@ -642,6 +643,7 @@ components:
         in: query
         name: limit
         description: maximum items to be returned
+        required: true
         schema:
           type: integer
           format: int32
