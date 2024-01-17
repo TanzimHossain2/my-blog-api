@@ -6,6 +6,7 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 const PORT = process.env.PORT || 4000;
 
 const Article = require('./models/Article');
+const articleService = require('./services/article');
 
 
 // express app
@@ -28,53 +29,15 @@ app.route('/api/v1/articles')
         // 1. extract query params
         const page = +req.query.page || 1;
         const limit = +req.query.limit || 10;
-        const sortType = req.query.sort_type || 'desc';
-        const sortBy = req.query.sort_by || 'updatedAt';
-        const searchTerm = req.query.search || '';
 
-        // 2. call article service to fetch all articles
-        const articleInstance = new Article();
-        await articleInstance.init();
-        let articles;
+        // 2. call article service to get articles
+        let { articles, totalItems, totalPage, hasNext, hasPrev } = await articleService.findArticles({ ...req.query, page, limit });
 
-        // filter by search term
-        if (searchTerm) {
-            articles = await articleInstance.search(searchTerm);
-        } else {
-            articles = await articleInstance.find();
-        }
-
-        // sort articles
-        articles = await articleInstance.sort(articles, sortType, sortBy);
-        // paginate articles
-        const {
-            result,
-            totalItems,
-            totalPage,
-            hasNext,
-            hasPrev
-        } = await articleInstance.pagination(articles, page, limit);
-
-        articles = result;
-        
         // 3. generate necessary response
-        articles = articles.map(article => {
-
-            const transformed = { ...article };
-            transformed.author = {
-                id: transformed.authorId,
-                //Todo
-            }
-            transformed.link = `/articles/${transformed.id}`;
-
-            delete transformed.body;
-            delete transformed.authorId;
-
-            return transformed;
-        })
+        articlesResponse = articleService.transFromArticles({ articles })
 
         const response = {
-            data: articles,
+            data: articlesResponse,
             pagination: {
                 page,
                 limit,
