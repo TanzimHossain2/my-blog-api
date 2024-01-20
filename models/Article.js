@@ -25,20 +25,46 @@ class Article {
         let result;
         if (sortType === 'asc') {
             result = await this.#sortAsc(articles, sortBy);
-        }
-        else {
+        } else {
             result = await this.#sortDesc(articles, sortBy);
         }
         return result;
     }
-
+    
     async #sortAsc(articles, sortBy) {
-        return articles.sort((a, b) => a[sortBy].toString().localeCompare(b[sortBy].toString()));
+        return articles.sort((a, b) => {
+            const valueA = this.getFieldValue(a, sortBy);
+            const valueB = this.getFieldValue(b, sortBy);
+    
+            if (typeof valueA === 'number' && typeof valueB === 'number') {
+                return valueA - valueB;
+            } else {
+                // Case-insensitive string comparison
+                return valueA.toLowerCase().localeCompare(valueB.toLowerCase());
+            }
+        });
     }
-
+    
     async #sortDesc(articles, sortBy) {
-        return articles.sort((a, b) => b[sortBy].toString().localeCompare(a[sortBy].toString()));
+        return articles.sort((a, b) => {
+            const valueA = this.getFieldValue(a, sortBy);
+            const valueB = this.getFieldValue(b, sortBy);
+    
+            if (typeof valueA === 'number' && typeof valueB === 'number') {
+                return valueB - valueA;
+            } else {
+                // Case-insensitive string comparison
+                return valueB.toLowerCase().localeCompare(valueA.toLowerCase());
+            }
+        });
     }
+    
+    #getFieldValue(item, field) {
+        // Convert to number if the field represents numeric data
+        return isNaN(item[field]) ? item[field] : Number(item[field]);
+    }
+    
+    
 
     async pagination(articles, page, limit) {
 
