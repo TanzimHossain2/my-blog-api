@@ -19,7 +19,6 @@
       "createdAt": "2024-01-15T12:39:17.461Z",
       "updatedAt": "2024-01-15T12:39:54.461Z"
     },
-
     {
       "id": 3,
       "authorId": 3,
@@ -91,6 +90,26 @@
       "status": "published",
       "createdAt": "2024-01-16T09:21:32.789Z",
       "updatedAt": "2024-01-16T09:21:32.789Z"
+    },
+    {
+      "id": 11,
+      "createdAt": "2024-01-20T14:55:54.070Z",
+      "updatedAt": "2024-01-20T14:55:54.070Z",
+      "title": "Article",
+      "body": "First article",
+      "authorId": 1,
+      "cover": "https://se.aws.example.com/22a",
+      "status": "draft"
+    },
+    {
+      "id": 12,
+      "createdAt": "2024-01-20T14:57:45.378Z",
+      "updatedAt": "2024-01-20T14:57:45.378Z",
+      "title": "Article 1",
+      "body": "First article",
+      "authorId": 999,
+      "cover": "https://se.aws.example.com/22a",
+      "status": "draft"
     }
   ],
   "comments": []

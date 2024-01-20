@@ -27,6 +27,14 @@ app.use(
     }),
 );
 
+app.use((req, res, next) => {
+    req.user = {
+        id: 999,
+        name: 'John Doe'
+    }
+    next();
+})
+
 
 // routes
 // Health check route
@@ -47,13 +55,13 @@ app.route('/api/v1/articles')
         const searchTerm = req.query.search || '';
 
         // 2. call article service to get articles
-        let { articles, totalItems, totalPage, hasNext, hasPrev } = await articleService.findArticles({ 
-            page, 
-            limit, 
-            sortType, 
-            sortBy, 
+        let { articles, totalItems, totalPage, hasNext, hasPrev } = await articleService.findArticles({
+            page,
+            limit,
+            sortType,
+            sortBy,
             searchTerm
-         });
+        });
 
         // 3. generate necessary response
         articlesResponse = articleService.transFromArticles({ articles })
@@ -83,9 +91,28 @@ app.route('/api/v1/articles')
 
         res.status(200).json(response);
     })
+
     // create new article
-    .post((req, res) => {
-        res.status(200).send({ path: '/articles', method: 'POST' });
+    .post(async (req, res) => {
+        // step 1: destruct request body
+        const { title, body, cover, status } = req.body;
+
+        // step 2: invoke the service function
+        const newArticle = await articleService.createNewArticle({ title, body, cover, status, authorId: req.user.id });
+
+        // step 3: generate response 
+        const response = {
+            code: 201,
+            message: 'Article created successfully!',
+            data: newArticle,
+            links: {
+                self: `${req.url}/${newArticle.id}`,
+                author: `${req.url}/${newArticle.id}/author`,
+                comments: `${req.url}/${newArticle.id}/comments`
+            }
+        }
+
+        res.status(201).json(response);
     });
 
 app.route('/api/v1/articles/:id')

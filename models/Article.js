@@ -23,19 +23,24 @@ class Article {
 
     async sort(articles, sortType = "asc", sortBy = "updatedAt") {
         let result;
-        if (sortType === 'asc') {
-            result = await this.#sortAsc(articles, sortBy);
-        } else {
-            result = await this.#sortDesc(articles, sortBy);
+        try {
+            if (sortType === 'asc') {
+                result = await this.#sortAsc(articles, sortBy);
+            } else {
+                result = await this.#sortDesc(articles, sortBy);
+            }
+        } catch (error) {
+            console.error(`Error sorting articles: ${error.message}`);
+            result = articles; // Return the original array in case of an error
         }
         return result;
     }
-    
+
     async #sortAsc(articles, sortBy) {
-        return articles.sort((a, b) => {
-            const valueA = this.getFieldValue(a, sortBy);
-            const valueB = this.getFieldValue(b, sortBy);
-    
+        return articles.toSorted((a, b) => {
+            const valueA = this.#getFieldValue(a, sortBy);
+            const valueB = this.#getFieldValue(b, sortBy);
+
             if (typeof valueA === 'number' && typeof valueB === 'number') {
                 return valueA - valueB;
             } else {
@@ -44,12 +49,12 @@ class Article {
             }
         });
     }
-    
+
     async #sortDesc(articles, sortBy) {
-        return articles.sort((a, b) => {
-            const valueA = this.getFieldValue(a, sortBy);
-            const valueB = this.getFieldValue(b, sortBy);
-    
+        return articles.toSorted((a, b) => {
+            const valueA = this.#getFieldValue(a, sortBy);
+            const valueB = this.#getFieldValue(b, sortBy);
+
             if (typeof valueA === 'number' && typeof valueB === 'number') {
                 return valueB - valueA;
             } else {
@@ -58,13 +63,14 @@ class Article {
             }
         });
     }
-    
+
     #getFieldValue(item, field) {
         // Convert to number if the field represents numeric data
-        return isNaN(item[field]) ? item[field] : Number(item[field]);
+        return item && typeof item[field] !== 'undefined' ? (isNaN(item[field]) ? item[field] : Number(item[field])) : null;
     }
-    
-    
+
+
+
 
     async pagination(articles, page, limit) {
 
@@ -80,6 +86,23 @@ class Article {
             hasNext: page < totalPage,
             hasPrev: page > 1
         }
+    }
+
+    //article Create
+
+    async create(article, databaseConnection) {
+
+        const newArticle = {
+            id: this.articles.length + 1,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            ...article
+        }
+
+        this.articles.push(newArticle);
+        databaseConnection.db.articles = this.articles;
+        await databaseConnection.write();
+        return newArticle;
     }
 
 

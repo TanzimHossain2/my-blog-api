@@ -15,6 +15,7 @@ const findArticles = async ({ page = 1, limit = 5, sortType = 'dsce', sortBy = '
         articles = await articleInstance.find();
     }
 
+
     // sort articles
     articles = await articleInstance.sort(articles, sortType, sortBy);
 
@@ -48,7 +49,14 @@ const transFromArticles = ({ articles = [] }) => {
     })
 }
 
+const createNewArticle = async ({ title, body, authorId, cover = '', status = 'draft' }) => {
+    const articleInstance = new Article(databaseConnection.db.articles);
+    const newArticle = await articleInstance.create({ title, body, authorId, cover, status }, databaseConnection);
+    return newArticle;
+}
+
 module.exports = {
     findArticles,
-    transFromArticles
+    transFromArticles,
+    createNewArticle
 }
