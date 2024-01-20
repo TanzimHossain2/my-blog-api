@@ -1,8 +1,8 @@
 const Article = require("../models/Article");
 const databaseConnection = require('../db');
+const { request } = require("express");
 
-const findArticles = async ({ page = 1, limit = 5, sortType = 'asc', sortBy = 'updatedAt', searchTerm = "" }) => {
-
+const findArticles = async ({ page = 1, limit = 5, sortType = 'dsce', sortBy = 'updatedAt', searchTerm = "" }) => {
     //get articles from db
     const articleInstance = new Article(databaseConnection.db.articles);
 

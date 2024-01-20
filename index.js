@@ -39,13 +39,21 @@ app.route('/api/v1/articles')
 
     // get all articles
     .get(async (req, res) => {
-
         // 1. extract query params
         const page = +req.query.page || 1;
         const limit = +req.query.limit || 10;
+        const sortType = req.query.sort_type || 'desc';
+        const sortBy = req.query.sort_by || 'updatedAt';
+        const searchTerm = req.query.search || '';
 
         // 2. call article service to get articles
-        let { articles, totalItems, totalPage, hasNext, hasPrev } = await articleService.findArticles({ ...req.query, page, limit });
+        let { articles, totalItems, totalPage, hasNext, hasPrev } = await articleService.findArticles({ 
+            page, 
+            limit, 
+            sortType, 
+            sortBy, 
+            searchTerm
+         });
 
         // 3. generate necessary response
         articlesResponse = articleService.transFromArticles({ articles })
