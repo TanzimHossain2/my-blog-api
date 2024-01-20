@@ -1,13 +1,7 @@
-const connection = require("../db");
 
 class Article {
-    constructor() {
-        this.articles = [];
-    }
-
-    async init() {
-        const db = await connection.getDB();
-        this.articles = db.articles;
+    constructor(articles) {
+        this.articles = articles;
     }
 
     async find() {

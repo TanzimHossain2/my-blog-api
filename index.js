@@ -8,6 +8,9 @@ const OpenApiValidator = require('express-openapi-validator');
 // PORT
 const PORT = process.env.PORT || 4000;
 
+// db 
+const databaseConnection = require('./db');
+
 // services
 const articleService = require('./services/article');
 
@@ -62,12 +65,12 @@ app.route('/api/v1/articles')
 
         if (hasPrev) {
             response.pagination.prev = page - 1;
-            response.links.prev = `/articles?page=${page - 1}&limit=${limit}`;
+            response.links.prev = `${req.url}?page=${page - 1}&limit=${limit}`;
         }
 
         if (hasNext) {
             response.pagination.next = page + 1;
-            response.links.next = `/articles?page=${page + 1}&limit=${limit}`;
+            response.links.next = `${req.url}?page=${page + 1}&limit=${limit}`;
         }
 
         res.status(200).json(response);
@@ -107,14 +110,29 @@ app.route('/api/v1/auth/signin')
 app.use((err, req, res, next) => {
     // format error
     res.status(err.status || 500).json({
-      message: err.message,
-      errors: err.errors,
+        message: err.message,
+        errors: err.errors,
     });
-  });
+});
 
 
-// start server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-}
-);
+(async () => {
+    // connect to db
+    console.log('Connecting to database...');
+    try {
+        await databaseConnection.getDB();
+        console.log('Connected to database successfully!');
+    } catch (err) {
+        console.log(err);
+    }
+
+    // start server
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    }
+    );
+
+
+})();
+
+

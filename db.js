@@ -7,7 +7,7 @@ class DatabaseConnection {
         this.dbURL = dbURL;
     }
 
-    async read() {
+    async connect() {
         try {
             const dbStr = await fs.readFile(this.dbURL, { encoding: 'utf-8' });
             this.db = JSON.parse(dbStr);
@@ -32,7 +32,7 @@ class DatabaseConnection {
         if (this.db) {
             return this.db;
         }
-        await this.read();
+        await this.connect();
         return this.db;
     }
 }
@@ -43,6 +43,6 @@ const location = path.resolve(process.env.DB_URL);
 // const location1 = path.join(__dirname, process.env.DB_URL1);
 
 
-const connection = new DatabaseConnection(location);
+const databaseConnection = new DatabaseConnection(location);
 
-module.exports = connection;
+module.exports = databaseConnection;

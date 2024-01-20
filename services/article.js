@@ -1,8 +1,10 @@
 const Article = require("../models/Article");
+const databaseConnection = require('../db');
 
 const findArticles = async ({ page = 1, limit = 5, sortType = 'asc', sortBy = 'updatedAt', searchTerm = "" }) => {
-    const articleInstance = new Article();
-    await articleInstance.init();
+
+    //get articles from db
+    const articleInstance = new Article(databaseConnection.db.articles);
 
     let articles;
 
