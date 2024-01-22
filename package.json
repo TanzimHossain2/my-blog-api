@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --ignore ./db --exec node index.js",
-    "start": "node index.js"
+    "dev": "nodemon --ignore ./old/db --exec node app.js",
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
