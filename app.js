@@ -9,6 +9,9 @@ const mongoose = require('mongoose');
 // PORT
 const PORT = process.env.PORT || 4000;
 
+// Models
+const User = require('./model/User');
+
 // express app
 const app = express();
 
@@ -61,7 +64,7 @@ mongoose.connect(connectionURL, {
         console.log('DB connected successfully');
 
         // start the server
-        app.listen(PORT, () => {
+        app.listen(PORT, async () => {
             console.log(`Server running on http://localhost:${PORT}`);
         }
         );
