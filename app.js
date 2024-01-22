@@ -4,6 +4,7 @@ const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
 const OpenApiValidator = require('express-openapi-validator');
+const mongoose = require('mongoose');
 
 // PORT
 const PORT = process.env.PORT || 4000;
@@ -46,12 +47,30 @@ app.use((err, req, res, next) => {
     });
 });
 
+// connect to DB
 
-// start server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-}
-);
+let connectionURL = process.env.DB_CONNECTION_URL;
+connectionURL = connectionURL.replace('<username>', process.env.DB_USER_NAME);
+connectionURL = connectionURL.replace('<password>', process.env.DB_PASSWORD);
+connectionURL = `${connectionURL}/${process.env.DB_NAME}?${process.env.DB_URL_QUERY}`;
+
+mongoose.connect(connectionURL, {
+    connectTimeoutMS: 5000,
+})
+    .then(() => {
+        console.log('DB connected successfully');
+
+        // start the server
+        app.listen(PORT, () => {
+            console.log(`Server running on http://localhost:${PORT}`);
+        }
+        );
+    })
+    .catch((err) => {
+        console.log('Error connecting to DB');
+        console.log(err);
+    });
+
 
 
 
