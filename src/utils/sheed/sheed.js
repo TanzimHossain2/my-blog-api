@@ -1,4 +1,4 @@
-const User = require('../model/User');
+const User = require('../../model/User');
 const { faker } = require('@faker-js/faker');
 
 const seedUser = (noOfUsers = 5) => {
