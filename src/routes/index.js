@@ -4,7 +4,7 @@ const { controllers: articleController } = require('../api/v1/article');
 router.
     route('/api/v1/articles')
     .get(articleController.findAll)
-    .post((req, res) => { });
+    .post(articleController.create);
 
 router
     .route('/api/v1/articles/:id')
