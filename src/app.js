@@ -5,11 +5,16 @@ const applyMiddleware = require('./middleware');
 // Models
 const User = require('./model/User');
 
+// Routes
+const routers = require('./routes');
+
 // express app
 const app = express();
 
 // middlewares
 applyMiddleware(app);
+
+app.use(routers);
 
 // Health check route
 app.get('/health', (req, res) => {
@@ -20,7 +25,8 @@ app.get('/health', (req, res) => {
 });
 
 // Error handler
-app.use((err, req, res, next) => {
+app.use((err, _req, res, next) => {
+    console.log(err);
     res.status(err.status || 500).json({
         message: err.message,
         errors: err.errors,
