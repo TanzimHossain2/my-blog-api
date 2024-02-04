@@ -1,4 +1,4 @@
-version: '4.26.1'
+version: "4.26.1"
 services:
   #MongoDB
   mongodb:
@@ -15,6 +15,22 @@ services:
       - my_mongodb_data:/data/db
 
   #MongoExpress
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: testuser
+      ME_CONFIG_MONGODB_ADMINPASSWORD: testpassword
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+    depends_on:
+      - mongodb
 
 volumes:
   my_mongodb_data:

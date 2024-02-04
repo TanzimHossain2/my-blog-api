@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --ignore ./old/db --exec node src/app.js",
+    "dev": "nodemon --ignore ./old/db --exec node src/index.js",
     "start": "node app.js"
   },
   "keywords": [],

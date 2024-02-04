@@ -2,7 +2,8 @@ node_modules
 .env
 
 
-
+vscode
+vscode/*
 
 # Logs
 logs
@@ -14,3 +15,5 @@ lerna-debug.log*
 .pnpm-debug.log*
 
 
+.vscode
+.vscode/*
