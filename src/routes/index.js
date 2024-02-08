@@ -3,12 +3,12 @@ const { controllers: articleController } = require('../api/v1/article');
 
 router.
     route('/api/v1/articles')
-    .get(articleController.findAll)
+    .get(articleController.findAllItems)
     .post(articleController.create);
 
 router
     .route('/api/v1/articles/:id')
-    .get((req, res) => { })
+    .get(articleController.findSingleItem)
     .put((req, res) => { })
     .patch((req, res) => { })
     .delete((req, res) => { });

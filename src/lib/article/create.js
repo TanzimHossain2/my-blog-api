@@ -16,7 +16,12 @@ const create = async ({ title, body = '', cover = '', status = 'draft', author }
         author: author.id
     });
 
-    return await article.save();
+    await article.save();
+
+    return {
+        ...article._doc,
+        id: article._id,
+    };
 
 };
 

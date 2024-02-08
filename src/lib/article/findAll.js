@@ -39,7 +39,33 @@ const count = ({ search = '' }) => {
     return Article.countDocuments(filter);
 };
 
+const findSingleItem = async ({ id, expand = '' }) => {
+    if (!id) throw new Error('Id is required');
+
+    expand = expand.split(',').map(item => item.trim());
+
+    const article = await Article.findById(id);
+    if (expand.includes('author')) {
+        await article.populate({
+            path: 'author',
+            select: 'name id'
+        });
+    }
+    if (expand.includes('comment')) {
+        await article.populate({
+            path: 'comments',
+        });
+    }
+
+    return {
+        ...article._doc,
+        id: article._id,
+    };
+
+};
+
 module.exports = {
     findAll,
-    count
+    count,
+    findSingleItem
 };

@@ -1,4 +1,4 @@
-const { findAll, count } = require('./findAll');
+const { findAll, count, findSingleItem } = require('./findAll');
 const create = require('./create');
 
-module.exports = { findAll, count, create };
+module.exports = { findAll, count, create, findSingleItem };
