@@ -1,22 +1,13 @@
 const articleService = require('../../../../lib/article');
-const { param } = require('../../../../routes');
-
-
-const generateQueryString = (query) => {
-    return Object.keys(query)
-        .map(key => (
-            encodeURIComponent(key) + '=' + encodeURIComponent(query[key])
-        ))
-        .join('&');
-
-}
+const { query } = require('../../../../utils');
+const defaults = require('../../../../config/defaults');
 
 const findAll = async (req, res, next) => {
-    const page = req.query.page || 1;
-    const limit = req.query.limit || 10;
-    const sortType = req.query.sort_type || 'desc';
-    const sortBy = req.query.sort_by || 'updateAt';
-    const search = req.query.search || '';
+    const page = req.query.page || defaults.page;
+    const limit = req.query.limit || defaults.limit;
+    const sortType = req.query.sort_type || defaults.sortType;
+    const sortBy = req.query.sort_by || defaults.sortBy;
+    const search = req.query.search || defaults.search;
 
     try {
         const articles = await articleService.findAll({ page, limit, sortType, sortBy, search });
@@ -29,45 +20,21 @@ const findAll = async (req, res, next) => {
             link: {
                 self: `${req.protocol}://${req.get('host')}${req.path}/${article._id}`
             }
-        }))
+        }));
 
         //pagination
         const totalItems = await articleService.count({ search });
-        const totalPages = Math.ceil(totalItems / limit);
-        const pagination = {
-            page,
-            limit,
-            totalItems,
-            totalPages,
-
-        }
-
-        if (page < totalPages) {
-            pagination.next = page + 1;
-        }
-
-        if (page > 1) {
-            pagination.prev = page - 1;
-        }
+        const pagination = query.getPagination({ totalItems, limit, page });
 
         //Links
-        const links = {
-            self: req.path
-        }
-
-        if (pagination.next) {
-            const query = generateQueryString({ ...req.query, page: pagination.next });
-
-            links.next = `${req.path}?${query}`;
-
-        }
-
-        if (pagination.prev) {
-
-            const query = generateQueryString({ ...req.query, page: pagination.prev });
-            links.prev = `${req.path}?${query}`;
-        }
-
+        const links = query.getHeatOsForAllItems({
+            url: req.url,
+            path: req.path,
+            query: req.query,
+            hasNext: !!pagination.next, /* !! converts the value to boolean */
+            hasPrev: !!pagination.prev,
+            page
+        });
 
         res.status(200).json({ data, pagination, links });
 
@@ -75,6 +42,6 @@ const findAll = async (req, res, next) => {
         next(err);
     }
 
-}
+};
 
 module.exports = findAll;

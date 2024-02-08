@@ -16,12 +16,8 @@ const create = async ({ title, body = '', cover = '', status = 'draft', author }
         author: author.id
     });
 
-    try {
-        return await article.save();
-    } catch (err) {
-        throw err;
-    }
+    return await article.save();
 
-}
+};
 
 module.exports = create;

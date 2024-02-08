@@ -1,8 +1,16 @@
 const { Article } = require('../../model');
+const defaults = require('../../config/defaults');
 
-const findAll = ({ page = 1, limit = 10, sortType = 'dsce', sortBy = 'updateAt', search = '' }) => {
+const findAll = ({
+    page = defaults.page,
+    limit = defaults.limit,
+    sortType = defaults.sortType,
+    sortBy = defaults.sortBy,
+    search = defaults.search
+}) => {
 
     const sortStr = `${sortType === 'dsce' ? '-' : ''}${sortBy}`;
+
     const filter = {
         title: new RegExp(search, 'i')
     };
@@ -15,9 +23,9 @@ const findAll = ({ page = 1, limit = 10, sortType = 'dsce', sortBy = 'updateAt',
             path: 'author',
             select: 'name email'
 
-        })
+        });
 
-}
+};
 
 const count = ({ search = '' }) => {
     const filter = {
@@ -25,7 +33,7 @@ const count = ({ search = '' }) => {
     };
 
     return Article.countDocuments(filter);
-}
+};
 
 module.exports = {
     findAll,

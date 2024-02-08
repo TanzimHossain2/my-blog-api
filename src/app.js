@@ -1,9 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const applyMiddleware = require('./middleware');
-
-// Models
-const User = require('./model/User');
 
 // Routes
 const routers = require('./routes');

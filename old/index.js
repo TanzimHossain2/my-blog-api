@@ -31,9 +31,9 @@ app.use((req, res, next) => {
     req.user = {
         id: 999,
         name: 'John Doe'
-    }
+    };
     next();
-})
+});
 
 
 // routes
@@ -64,7 +64,7 @@ app.route('/api/v1/articles')
         });
 
         // 3. generate necessary response
-        articlesResponse = articleService.transFromArticles({ articles })
+        const articlesResponse = articleService.transFromArticles({ articles });
 
         const response = {
             data: articlesResponse,
@@ -77,7 +77,7 @@ app.route('/api/v1/articles')
             links: {
                 self: req.originalUrl,
             }
-        }
+        };
 
         if (hasPrev) {
             response.pagination.prev = page - 1;
@@ -110,7 +110,7 @@ app.route('/api/v1/articles')
                 author: `${req.url}/${newArticle.id}/author`,
                 comments: `${req.url}/${newArticle.id}/comments`
             }
-        }
+        };
 
         res.status(201).json(response);
     });
@@ -142,6 +142,7 @@ app.route('/api/v1/auth/signin')
 
 
 // Error handler
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
     // format error
     res.status(err.status || 500).json({

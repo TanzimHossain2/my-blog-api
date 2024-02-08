@@ -4,4 +4,4 @@ const create = require('./create');
 module.exports = {
     findAll,
     create
-}
+};

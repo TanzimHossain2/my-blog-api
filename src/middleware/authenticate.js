@@ -5,8 +5,8 @@ const authenticate = (req, res, next) => {
         email: 'johndoe@example.com',
         password: 'password',
         role: 'user',
-    }
+    };
     next();
-}
+};
 
 module.exports = authenticate;

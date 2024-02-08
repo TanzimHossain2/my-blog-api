@@ -7,9 +7,9 @@ const seedUser = (noOfUsers = 5) => {
             name: faker.name.fullName(),
             email: faker.internet.email(),
             password: faker.internet.password(),
-        })
+        });
         user.save();
     }
-}
+};
 
 module.exports = seedUser;

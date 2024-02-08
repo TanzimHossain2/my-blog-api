@@ -1,8 +1,7 @@
-const Article = require("../models/Article");
+const Article = require('../models/Article');
 const databaseConnection = require('../db');
-const { request } = require("express");
 
-const findArticles = async ({ page = 1, limit = 5, sortType = 'dsce', sortBy = 'updatedAt', searchTerm = "" }) => {
+const findArticles = async ({ page = 1, limit = 5, sortType = 'dsce', sortBy = 'updatedAt', searchTerm = '' }) => {
     //get articles from db
     const articleInstance = new Article(databaseConnection.db.articles);
 
@@ -28,8 +27,8 @@ const findArticles = async ({ page = 1, limit = 5, sortType = 'dsce', sortBy = '
         totalPage,
         hasNext,
         hasPrev
-    }
-}
+    };
+};
 
 const transFromArticles = ({ articles = [] }) => {
     return articles.map(article => {
@@ -38,7 +37,7 @@ const transFromArticles = ({ articles = [] }) => {
         transformed.author = {
             id: transformed.authorId,
             //Todo find author name - authorService
-        }
+        };
 
         transformed.link = `/articles/${transformed.id}`;
 
@@ -46,17 +45,17 @@ const transFromArticles = ({ articles = [] }) => {
         delete transformed.authorId;
 
         return transformed;
-    })
-}
+    });
+};
 
 const createNewArticle = async ({ title, body, authorId, cover = '', status = 'draft' }) => {
     const articleInstance = new Article(databaseConnection.db.articles);
     const newArticle = await articleInstance.create({ title, body, authorId, cover, status }, databaseConnection);
     return newArticle;
-}
+};
 
 module.exports = {
     findArticles,
     transFromArticles,
     createNewArticle
-}
+};

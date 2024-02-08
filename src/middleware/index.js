@@ -15,7 +15,7 @@ const applyMiddleware = (app) => {
     );
 
     //todo remove later
-    app.use(authenticate)
-}
+    app.use(authenticate);
+};
 
 module.exports = applyMiddleware;
