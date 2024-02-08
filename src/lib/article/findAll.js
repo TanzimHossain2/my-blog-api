@@ -1,7 +1,7 @@
 const { Article } = require('../../model');
 const defaults = require('../../config/defaults');
 
-const findAll = ({
+const findAll = async ({
     page = defaults.page,
     limit = defaults.limit,
     sortType = defaults.sortType,
@@ -14,8 +14,7 @@ const findAll = ({
     const filter = {
         title: new RegExp(search, 'i')
     };
-
-    return Article.find(filter)
+    const articles = await Article.find(filter)
         .sort(sortStr)
         .skip(page * limit - limit)
         .limit(limit)
@@ -25,6 +24,11 @@ const findAll = ({
 
         });
 
+
+    return articles.map(article => ({
+        ...article._doc,
+        id: article._id,
+    }));
 };
 
 const count = ({ search = '' }) => {

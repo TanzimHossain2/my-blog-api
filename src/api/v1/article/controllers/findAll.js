@@ -15,12 +15,11 @@ const findAll = async (req, res, next) => {
         /* response Generation */
 
         //data 
-        const data = articles.map(article => ({
-            ...article._doc,
-            link: {
-                self: `${req.protocol}://${req.get('host')}${req.path}/${article._id}`
-            }
-        }));
+        const data = query.getTransFormedItems({
+            items: articles,
+            path: '/articles',
+            selection: ['id', 'title', 'author', 'cover', 'createdAt', 'updatedAt'],
+        });
 
         //pagination
         const totalItems = await articleService.count({ search });

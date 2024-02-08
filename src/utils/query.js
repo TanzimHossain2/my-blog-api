@@ -42,4 +42,27 @@ const getHeatOsForAllItems = ({ url = '/', path = '', query = {}, hasNext = fals
     return links;
 };
 
-module.exports = { getPagination, getHeatOsForAllItems };
+const getTransFormedItems = ({ items = [], selection = [], path = '/' }) => {
+
+    if (!Array.isArray(items) && !Array.isArray(selection)) {
+        throw new Error('Invalid Arguments');
+    }
+
+    if (selection.length === 0) {
+        return items.map(item => ({ ...item, link: `${path}/${item.id}` }));
+    }
+
+    return items.map(item => {
+        const result = {};
+        selection.forEach(key => {
+            result[key] = item[key];
+        });
+        result.link = `${path}/${item.id}`;
+
+        return result;
+
+    });
+
+};
+
+module.exports = { getPagination, getHeatOsForAllItems, getTransFormedItems };
