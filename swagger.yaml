@@ -340,8 +340,11 @@ paths:
           $ref: "#/components/responses/400"
         "401":
           $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+
     patch:
       security:
         - bearerAuth: []
@@ -353,7 +356,23 @@ paths:
         content:
           "application/json":
             schema:
-              $ref: "#/components/schemas/ArticleCreateDTO"
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: article title
+                body:
+                  type: string
+                  format: text
+                  example: article body
+                cover:
+                  type: string
+                  format: url
+                  example: "https://s3.amazon.com/23"
+                status:
+                  type: string
+                  enum: [draft, published]
+                  example: draft
       responses:
         "200":
           description: Successfully Updated
@@ -621,7 +640,7 @@ components:
               code:
                 type: integer
                 format: int32
-                example: 401
+                example: 404
               error:
                 type: string
                 example: Not Found

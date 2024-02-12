@@ -1,6 +1,13 @@
 const { Article } = require('../../model');
 const defaults = require('../../config/defaults');
+const { notFound } = require('../../utils/error');
 
+/**
+ * Find all articles
+ * pagination, sorting and search
+ * @param {Object} options
+ * @returns 
+ */
 const findAll = async ({
     page = defaults.page,
     limit = defaults.limit,
@@ -39,21 +46,35 @@ const count = ({ search = '' }) => {
     return Article.countDocuments(filter);
 };
 
+/**
+ * Find single article
+ * @param {Object} options
+ * @param {String} options.id
+ * @param {String} options.expand
+ * @returns 
+ */
 const findSingleItem = async ({ id, expand = '' }) => {
     if (!id) throw new Error('Id is required');
 
     expand = expand.split(',').map(item => item.trim());
 
     const article = await Article.findById(id);
+
+    if (!article) {
+        throw notFound('Article not found');
+    }
+
     if (expand.includes('author')) {
         await article.populate({
             path: 'author',
-            select: 'name id'
+            select: 'name id',
+            strictPopulate: false
         });
     }
     if (expand.includes('comment')) {
         await article.populate({
             path: 'comments',
+            strictPopulate: false
         });
     }
 
