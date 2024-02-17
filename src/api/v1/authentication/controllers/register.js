@@ -1,10 +1,10 @@
-const registerService = require('../../../../lib/auth');
+const authService = require('../../../../lib/auth');
 const { generateToken } = require('../../../../lib/token');
 
 const register = async (req, res, next) => {
     const { name, email, password } = req.body;
     try {
-        const user = await registerService({ name, email, password });
+        const user = await authService.register({ name, email, password });
 
         // Access token
         const payload = {

@@ -19,5 +19,6 @@ const createUser = async ({ name, email, password }) => {
 
 module.exports = {
     userExist,
-    createUser
+    createUser,
+    findUserByEmail
 };
