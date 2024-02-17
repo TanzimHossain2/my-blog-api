@@ -29,20 +29,13 @@ Content-Type: application/json
     }
 ]
 
-# [
-#     {
-#         "op": "replace",
-#         "path": "/name",
-#         "value": "Tanzim"
-#     },
-#     {
-#         "op": "add",
-#         "path": "/gender",
-#         "value": "Male"
-#     },
-#     {
-#         "op": "replace",
-#         "path": "/id",
-#         "value": "New Author"
-#     }
-# ]
+###
+
+POST http://localhost:4000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "Tanzim",
+  "email": "example@gmail.com",
+  "password": "password123"
+}

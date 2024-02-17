@@ -1,7 +1,16 @@
 const router = require('express').Router();
 const { controllers: articleController } = require('../api/v1/article');
 const { controllers: articleControllerV2 } = require('../api/v2/article');
+const { controllers: authControllers } = require('../api/v1/authentication');
 
+
+//Auth routes
+
+router
+    .post('/api/v1/auth/register', authControllers.register)
+    .post('/api/v1/auth/login', authControllers.login);
+
+//Article routes
 router.
     route('/api/v1/articles')
     .get(articleController.findAllItems)
