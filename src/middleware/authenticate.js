@@ -20,7 +20,7 @@ const authenticate = async (req, res, next) => {
             return next(authorizationError(`Your account is  ${user.status}`));
         }
 
-        req.user = user._doc;
+        req.user = { ...user._doc, id: user.id };
 
         next();
 

@@ -49,3 +49,21 @@ Content-Type: application/json
   "email": "example@gmail.com",
   "password": "password123"
 }
+
+###
+
+POST http://localhost:4000/api/v1/articles
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDA2Zjc0NjU4MWNjZmViYjdjNTc4OSIsImVtYWlsIjoiZXhhbXBsZUBnbWFpbC5jb20iLCJuYW1lIjoiVGFuemltIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MDgxNzE3NjIsImV4cCI6MTcwODE3NTM2Mn0.cIBD-Cv4Ys1uPtuZ75Uf9N0YE-JnvQTLRgZzGeUULkk
+
+{
+  "title": "json patch 2",
+  "body": "json patch is a cool thing.2",
+  "tags": ["json"]
+}
+
+###
+
+DELETE  http://localhost:4000/api/v1/articles/65bf968473da8f3982e763e0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDA2Zjc0NjU4MWNjZmViYjdjNTc4OSIsImVtYWlsIjoiZXhhbXBsZUBnbWFpbC5jb20iLCJuYW1lIjoiVGFuemltIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MDgxNzE3NjIsImV4cCI6MTcwODE3NTM2Mn0.cIBD-Cv4Ys1uPtuZ75Uf9N0YE-JnvQTLRgZzGeUULkk
