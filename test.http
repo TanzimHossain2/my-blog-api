@@ -1,0 +1,48 @@
+PATCH http://localhost:4000/api/v2/articles/65c4ab758fcec4d262fd834f
+Content-Type: application/json
+
+[
+    {
+        "op": "replace",
+        "path": "title",
+        "value": "json patch"
+    },
+    {
+        "op": "replace",
+        "path": "body",
+        "value": "json patch is a cool thing."
+    },
+    {
+        "op": "add",
+        "path": "tags",
+        "value": "json"
+    },
+    {
+        "op":"add",
+        "path":"test1",
+        "value":"test1"
+    },
+    {
+        "op":"add",
+        "path":"test2",
+        "value":"test2"
+    }
+]
+
+# [
+#     {
+#         "op": "replace",
+#         "path": "/name",
+#         "value": "Tanzim"
+#     },
+#     {
+#         "op": "add",
+#         "path": "/gender",
+#         "value": "Male"
+#     },
+#     {
+#         "op": "replace",
+#         "path": "/id",
+#         "value": "New Author"
+#     }
+# ]

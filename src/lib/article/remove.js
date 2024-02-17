@@ -8,6 +8,9 @@ const removeItem = async (id) => {
         notFound();
     }
 
+    //Todo 
+    //Asynchronous Delete all associated comments
+
     return Article.findByIdAndDelete(id);
 
 };
