@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { controllers: articleController } = require('../api/v1/article');
 const { controllers: articleControllerV2 } = require('../api/v2/article');
 const { controllers: authControllers } = require('../api/v1/authentication');
+const authenticate = require('../middleware/authenticate');
 
 
 //Auth routes
@@ -14,18 +15,18 @@ router
 router.
     route('/api/v1/articles')
     .get(articleController.findAllItems)
-    .post(articleController.create);
+    .post(authenticate, articleController.create);
 
 router
     .route('/api/v1/articles/:id')
     .get(articleController.findSingleItem)
-    .put(articleController.updateItem)
-    .patch(articleController.updateItemPatch)
-    .delete(articleController.removeItem);
+    .put(authenticate, articleController.updateItem)
+    .patch(authenticate, articleController.updateItemPatch)
+    .delete(authenticate, articleController.removeItem);
 
 router
     .route('/api/v2/articles/:id')
-    .patch(articleControllerV2.updateItemPatch);
+    .patch(authenticate, articleControllerV2.updateItemPatch);
 
 
 module.exports = router;
